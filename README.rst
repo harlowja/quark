@@ -5,7 +5,7 @@ Quark
 Mission
 -------
 
-To be a scalable compute(r) maker & manipulator (in a box).
+To be a scalable compute(r) maker & manipulator.
 
 What it is
 ----------
