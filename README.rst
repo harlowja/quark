@@ -31,8 +31,8 @@ Basics
 There are three parts of ``quark``, the first being a ``quark-compute``
 which is the actual integration point with ``libvirt``; this component is
 actively placing information about itself into a zookeeper (or etcd?) directory
-that it is responsible for allocating (there would be assumed to be many
-hundred or thousands of these ``quark-compute`` processes and directories).
+that it is also responsible for creating when it starts up (there would be assumed to
+be many hundred or thousands of these ``quark-compute`` processes and directories).
 
 A sample/example of that directory is the following::
 
