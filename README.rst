@@ -30,13 +30,15 @@ Basics
 
 There are three parts of ``quark``, the first being a ``quark-compute``
 which is the actual integration point with ``libvirt``; this component is
-actively placing information about itself into a zookeeper (or etcd?) directory
-that it is also responsible for creating when it starts up (there would be assumed to
-be many hundred or thousands of these ``quark-compute`` processes and directories).
+actively placing information about itself (so that other components can
+watch/introspect what it is doing) into a zookeeper (or etcd?) directory.
+It is responsible for creating (that directory) when it starts up (there
+would be assumed to be many hundred or thousands of 
+these ``quark-compute`` processes and directories).
 
 A sample/example of that directory is the following::
 
-    self/ (used for a external entity to select a compute)
+    self/
        - ram
        - cpu
        - network/
@@ -92,10 +94,16 @@ the ``quark-orc`` which will be having watches setup on all
 the ``quark-compute`` directories (so that the ``quark-orc`` can be aware
 of the changes those ``quark-compute`` nodes are undergoing). It will be
 the ``quark-orc`` job to recieve work requests (from the ``quark-api``
-and drive them to completion); for example to boot a new virtual machine
-the ``quark-orc`` would need to go through a set of tasks that examine its
-in-memory version of the cluster and determine where a new ``next_task``
-should be placed.
+and drive them to completion).
+
+For example for a ``create-compute`` request the ``quark-orc`` will
+recieve said request and then identity where that request should
+be placed (by way of placing the request in a shared location that
+will allow one of the ``quark-compute`` nodes to select that as a
+new task); for multi-compute(r) requests this will get more involved
+and the ``quark-orc`` will have to do more work to ensure that none
+of the expected allocations (that get accepted as tasks) end up
+being discarded/aborted.
 
 The ``quark-orc`` will be a distributed component (that itself will have
 a similar zookeeper directory to what the ``quark-compute`` directory
